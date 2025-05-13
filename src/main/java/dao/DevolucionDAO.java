@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import modelo.Devolucion;
 
+
 /**
  *
  * @author mabel
@@ -27,7 +28,7 @@ public class DevolucionDAO {
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, devolucion.getIdDevolucion());
             stmt.setString(2, devolucion.getIdPrestamo());
-            stmt.setDate(3, Date.valueOf(devolucion.getFechaDevolucion()));
+            stmt.setDate(3, Date.valueOf(devolucion.getFechaDevolucion())); // Corregido
             stmt.setFloat(4, devolucion.getMoraPagada());
             stmt.executeUpdate();
         }
@@ -65,7 +66,7 @@ public class DevolucionDAO {
             devolucion = new Devolucion(
                 rs.getInt("id_devolucion"),
                 rs.getString("id_prestamo"),
-                rs.getDate("fecha_devolucion").toLocalDate(),
+                rs.getDate("fecha_devolucion").toLocalDate(), // Corregido
                 rs.getFloat("mora_pagada")
             );
         }
@@ -84,7 +85,7 @@ public class DevolucionDAO {
             Devolucion devolucion = new Devolucion(
                 rs.getInt("id_devolucion"),
                 rs.getString("id_prestamo"),
-                rs.getDate("fecha_devolucion").toLocalDate(),
+                rs.getDate("fecha_devolucion").toLocalDate(), // Correcto
                 rs.getFloat("mora_pagada")
             );
             lista.add(devolucion);
