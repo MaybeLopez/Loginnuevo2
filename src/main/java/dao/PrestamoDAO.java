@@ -2,104 +2,57 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package dao;
+package modelo;
 
-import bd.TestConnection;
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
-import modelo.Prestamo;
+import java.time.LocalDate;
 
 /**
  *
  * @author mabel
- */
-public class PrestamoDAO {
+ */    
+public class Prestamo {
+    private String idPrestamo;
+    private String idUsuario;
+    private String idEjemplar;
+    private LocalDate fechaPrestamo;
+    private LocalDate fechaLimite;
+    private LocalDate fechaDevolucion;
+    private float moraGenerada;
 
-    public void insertar(Prestamo prestamo) throws SQLException {
-        Connection conn = TestConnection.conectar();
-        String sql = "INSERT INTO Prestamo (id_prestamo, id_usuario, id_ejemplar, fecha_prestamo, fecha_limite, fecha_devolucion, mora_generada) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, prestamo.getIdPrestamo());
-            stmt.setString(2, prestamo.getIdUsuario());
-            stmt.setString(3, prestamo.getIdEjemplar());
-            stmt.setDate(4, Date.valueOf(prestamo.getFechaPrestamo()));
-            stmt.setDate(5, Date.valueOf(prestamo.getFechaLimite()));
-            stmt.setDate(6, Date.valueOf(prestamo.getFechaDevolucion()));
-            stmt.setFloat(7, prestamo.getMoraGenerada());
-            stmt.executeUpdate();
-        }
+    public Prestamo() {}
+
+    public Prestamo(String idPrestamo, String idUsuario, String idEjemplar,
+                    LocalDate fechaPrestamo, LocalDate fechaLimite, LocalDate fechaDevolucion, float moraGenerada) {
+        this.idPrestamo = idPrestamo;
+        this.idUsuario = idUsuario;
+        this.idEjemplar = idEjemplar;
+        this.fechaPrestamo = fechaPrestamo;
+        this.fechaLimite = fechaLimite;
+        this.fechaDevolucion = fechaDevolucion;
+        this.moraGenerada = moraGenerada;
     }
 
-    public void actualizar(Prestamo prestamo) throws SQLException {
-        Connection conn = TestConnection.conectar();
-        String sql = "UPDATE Prestamo SET id_usuario = ?, id_ejemplar = ?, fecha_prestamo = ?, fecha_limite = ?, fecha_devolucion = ?, mora_generada = ? WHERE id_prestamo = ?";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, prestamo.getIdUsuario());
-            stmt.setString(2, prestamo.getIdEjemplar());
-            stmt.setDate(3, Date.valueOf(prestamo.getFechaPrestamo()));
-            stmt.setDate(4, Date.valueOf(prestamo.getFechaLimite()));
-            stmt.setDate(5, Date.valueOf(prestamo.getFechaDevolucion()));
-            stmt.setFloat(6, prestamo.getMoraGenerada());
-            stmt.setString(7, prestamo.getIdPrestamo());
-            stmt.executeUpdate();
-        }
-    }
+    public String getIdPrestamo() { return idPrestamo; }
+    public void setIdPrestamo(String idPrestamo) { this.idPrestamo = idPrestamo; }
 
-    public void eliminar(String idPrestamo) throws SQLException {
-        Connection conn = TestConnection.conectar();
-        String sql = "DELETE FROM Prestamo WHERE id_prestamo = ?";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, idPrestamo);
-            stmt.executeUpdate();
-        }
-    }
+    public String getIdUsuario() { return idUsuario; }
+    public void setIdUsuario(String idUsuario) { this.idUsuario = idUsuario; }
 
-    public Prestamo obtenerPorId(String idPrestamo) throws SQLException {
-        Connection conn = TestConnection.conectar();
-        String sql = "SELECT * FROM Prestamo WHERE id_prestamo = ?";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, idPrestamo);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return new Prestamo(
-                    rs.getString("id_prestamo"),
-                    rs.getString("id_usuario"),
-                    rs.getString("id_ejemplar"),
-                    rs.getDate("fecha_prestamo").toLocalDate(),
-                    rs.getDate("fecha_limite").toLocalDate(),
-                    rs.getDate("fecha_devolucion").toLocalDate(),
-                    rs.getFloat("mora_generada")
-                );
-            }
-            rs.close();
-        }
-        return null;
-    }
+    public String getIdEjemplar() { return idEjemplar; }
+    public void setIdEjemplar(String idEjemplar) { this.idEjemplar = idEjemplar; }
 
-    public List<Prestamo> obtenerTodos() throws SQLException {
-        Connection conn = TestConnection.conectar();
-        String sql = "SELECT * FROM Prestamo";
-        List<Prestamo> lista = new ArrayList<>();
-        try (Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                Prestamo prestamo = new Prestamo(
-                    rs.getString("id_prestamo"),
-                    rs.getString("id_usuario"),
-                    rs.getString("id_ejemplar"),
-                    rs.getDate("fecha_prestamo").toLocalDate(),
-                    rs.getDate("fecha_limite").toLocalDate(),
-                    rs.getDate("fecha_devolucion").toLocalDate(),
-                    rs.getFloat("mora_generada")
-                );
-                lista.add(prestamo);
-            }
-        }
-        return lista;
-    }
+    public LocalDate getFechaPrestamo() { return fechaPrestamo; }
+    public void setFechaPrestamo(LocalDate fechaPrestamo) { this.fechaPrestamo = fechaPrestamo; }
+
+    public LocalDate getFechaLimite() { return fechaLimite; }
+    public void setFechaLimite(LocalDate fechaLimite) { this.fechaLimite = fechaLimite; }
+
+    public LocalDate getFechaDevolucion() { return fechaDevolucion; }
+    public void setFechaDevolucion(LocalDate fechaDevolucion) { this.fechaDevolucion = fechaDevolucion; }
+
+    public float getMoraGenerada() { return moraGenerada; }
+    public void setMoraGenerada(float moraGenerada) { this.moraGenerada = moraGenerada; }
 }
+
+
+
