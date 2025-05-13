@@ -2,57 +2,44 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package modelo;
+package dao;
 
-import java.time.LocalDate;
+import bd.TestConnection;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+import modelo.Prestado;
 
 /**
  *
  * @author mabel
- */    
-public class Prestamo {
-    private String idPrestamo;
-    private String idUsuario;
-    private String idEjemplar;
-    private LocalDate fechaPrestamo;
-    private LocalDate fechaLimite;
-    private LocalDate fechaDevolucion;
-    private float moraGenerada;
+ */
+public class PrestadoDAO {
 
-    public Prestamo() {}
-
-    public Prestamo(String idPrestamo, String idUsuario, String idEjemplar,
-                    LocalDate fechaPrestamo, LocalDate fechaLimite, LocalDate fechaDevolucion, float moraGenerada) {
-        this.idPrestamo = idPrestamo;
-        this.idUsuario = idUsuario;
-        this.idEjemplar = idEjemplar;
-        this.fechaPrestamo = fechaPrestamo;
-        this.fechaLimite = fechaLimite;
-        this.fechaDevolucion = fechaDevolucion;
-        this.moraGenerada = moraGenerada;
+    public void insertar(Prestado p) throws SQLException {
+        Connection conn = TestConnection.conectar();
+        String sql = "INSERT INTO Prestado (id_ejemplar, id_prestamo) VALUES (?, ?)";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, p.getIdEjemplar());
+            stmt.setString(2, p.getIdPrestamo());
+            stmt.executeUpdate();
+        }
     }
 
-    public String getIdPrestamo() { return idPrestamo; }
-    public void setIdPrestamo(String idPrestamo) { this.idPrestamo = idPrestamo; }
-
-    public String getIdUsuario() { return idUsuario; }
-    public void setIdUsuario(String idUsuario) { this.idUsuario = idUsuario; }
-
-    public String getIdEjemplar() { return idEjemplar; }
-    public void setIdEjemplar(String idEjemplar) { this.idEjemplar = idEjemplar; }
-
-    public LocalDate getFechaPrestamo() { return fechaPrestamo; }
-    public void setFechaPrestamo(LocalDate fechaPrestamo) { this.fechaPrestamo = fechaPrestamo; }
-
-    public LocalDate getFechaLimite() { return fechaLimite; }
-    public void setFechaLimite(LocalDate fechaLimite) { this.fechaLimite = fechaLimite; }
-
-    public LocalDate getFechaDevolucion() { return fechaDevolucion; }
-    public void setFechaDevolucion(LocalDate fechaDevolucion) { this.fechaDevolucion = fechaDevolucion; }
-
-    public float getMoraGenerada() { return moraGenerada; }
-    public void setMoraGenerada(float moraGenerada) { this.moraGenerada = moraGenerada; }
+    public List<Prestado> obtenerTodos() throws SQLException {
+        Connection conn = TestConnection.conectar();
+        String sql = "SELECT * FROM Prestado";
+        List<Prestado> lista;
+        try (Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+            lista = new ArrayList<>();
+            while (rs.next()) {
+                Prestado p = new Prestado(rs.getString("id_ejemplar"), rs.getString("id_prestamo"));
+                lista.add(p);
+            }          }
+        return lista;
+    }
 }
-
-
-
